@@ -17,7 +17,7 @@ class HomeScreen extends React.Component {
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Text>Home Screen</Text>
         <Button
-          title="Go to Details"
+          title="Go to Details Users"
           onPress={() => this.props.navigation.navigate("Details")}
         />
         <Button
@@ -30,12 +30,40 @@ class HomeScreen extends React.Component {
 }
 
 class DetailsScreen extends React.Component {
+  state = {
+    users: []
+  };
+  getUSers = () => {
+    return fetch("https://ea862c3d.ngrok.io/users")
+      .then(response => response.json())
+      .then(responseJson => {
+        // return responseJson.movies;
+        this.setState({
+          users: Object.values(responseJson)
+        });
+        console.log(Object.values(responseJson));
+        console.log(this.state.users);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   render() {
+    console.log(this.usersValues, "hola");
+    console.log(this.state.users.length);
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Text>Details Screen</Text>
+        {this.state.users && (
+          <Text>{this.state.users.map(user => user.username)}</Text>
+        )}
       </View>
     );
+  }
+
+  componentDidMount() {
+    this.getUSers();
   }
 }
 
@@ -81,17 +109,19 @@ class SingInScreen extends React.Component {
 
   handleSubmit = () => {
     console.log(this.state);
-    fetch("url", {
+    fetch("https://ea862c3d.ngrok.io/users", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: this.state.name,
-        username: this.state.username,
-        email: this.state.emailInput,
-        password: this.state.passwordInput
+        username: {
+          name: this.state.name,
+          username: this.state.username,
+          email: this.state.emailInput,
+          password: this.state.passwordInput
+        }
       })
     });
   };
@@ -147,6 +177,7 @@ class SingInScreen extends React.Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
