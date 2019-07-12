@@ -7,9 +7,11 @@ import {
   Button,
   StyleSheet,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  DisplayRoles
 } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import { FlatList } from "react-native-gesture-handler";
 
 class HomeScreen extends React.Component {
   render() {
@@ -17,7 +19,7 @@ class HomeScreen extends React.Component {
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Text>Home Screen</Text>
         <Button
-          title="Go to Details Users"
+          title="Users=Channels"
           onPress={() => this.props.navigation.navigate("Details")}
         />
         <Button
@@ -39,10 +41,9 @@ class DetailsScreen extends React.Component {
       .then(responseJson => {
         // return responseJson.movies;
         this.setState({
-          users: Object.values(responseJson)
+          users: Object.keys(responseJson)
         });
-        console.log(Object.values(responseJson));
-        console.log(this.state.users);
+        // console.log(responseJson);
       })
       .catch(error => {
         console.error(error);
@@ -50,20 +51,45 @@ class DetailsScreen extends React.Component {
   };
 
   render() {
-    console.log(this.usersValues, "hola");
-    console.log(this.state.users.length);
+    console.log(this.state.users, "state");
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Details Screen</Text>
-        {this.state.users && (
-          <Text>{this.state.users.map(user => user.username)}</Text>
-        )}
+      // <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View style={styles.container}>
+        <Text>CHANNELS</Text>
+        {this.state.users &&
+          this.state.users.map(user => {
+            console.log(user);
+            return (
+              <View>
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={() => {
+                    this.props.navigation.navigate("ChannelNotifications");
+                  }}
+                >
+                  <Text>{user}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
       </View>
     );
   }
 
   componentDidMount() {
     this.getUSers();
+    // console.log(this.state.users, "state");
+  }
+}
+
+class ChannelNotificationsScreen extends React.Component {
+  state = {};
+  render() {
+    return (
+      <View>
+        <Text>Channel Notifications -- need to add the get request here</Text>
+      </View>
+    );
   }
 }
 
@@ -220,11 +246,16 @@ const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
     Details: DetailsScreen,
-    SignIn: SingInScreen
+    SignIn: SingInScreen,
+    ChannelNotifications: ChannelNotificationsScreen
   },
   {
     initialRouteName: "Home"
-  }
+  },
+  {
+    ChannelNotifications: ChannelNotificationsScreen
+  },
+  { initialRouteName: "Details" }
 );
 
 const AppContainer = createAppContainer(AppNavigator);
