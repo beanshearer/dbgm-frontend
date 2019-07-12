@@ -8,10 +8,9 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  DisplayRoles
+  CheckBox
 } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import { FlatList } from "react-native-gesture-handler";
 
 class HomeScreen extends React.Component {
   render() {
@@ -19,8 +18,8 @@ class HomeScreen extends React.Component {
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Text>Home Screen</Text>
         <Button
-          title="Users=Channels"
-          onPress={() => this.props.navigation.navigate("Details")}
+          title="Channels"
+          onPress={() => this.props.navigation.navigate("Channels")}
         />
         <Button
           title="SignIn"
@@ -31,19 +30,17 @@ class HomeScreen extends React.Component {
   }
 }
 
-class DetailsScreen extends React.Component {
+class ChannelsScreen extends React.Component {
   state = {
-    users: []
+    channels: []
   };
-  getUSers = () => {
-    return fetch("https://ea862c3d.ngrok.io/users")
+  getChannels = () => {
+    return fetch("https://ea862c3d.ngrok.io/channels")
       .then(response => response.json())
       .then(responseJson => {
-        // return responseJson.movies;
         this.setState({
           users: Object.keys(responseJson)
         });
-        // console.log(responseJson);
       })
       .catch(error => {
         console.error(error);
@@ -51,14 +48,11 @@ class DetailsScreen extends React.Component {
   };
 
   render() {
-    console.log(this.state.users, "state");
     return (
-      // <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <View style={styles.container}>
         <Text>CHANNELS</Text>
         {this.state.users &&
-          this.state.users.map(user => {
-            console.log(user);
+          this.state.users.map(channel => {
             return (
               <View>
                 <TouchableOpacity
@@ -67,7 +61,7 @@ class DetailsScreen extends React.Component {
                     this.props.navigation.navigate("ChannelNotifications");
                   }}
                 >
-                  <Text>{user}</Text>
+                  <Text>{channel}</Text>
                 </TouchableOpacity>
               </View>
             );
@@ -77,8 +71,7 @@ class DetailsScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.getUSers();
-    // console.log(this.state.users, "state");
+    this.getChannels();
   }
 }
 
@@ -98,7 +91,8 @@ class SingInScreen extends React.Component {
     name: "",
     username: "",
     email: "",
-    password: ""
+    password: "",
+    ChannelRadioButton: ["channel1"]
   };
 
   handleNameInput = nameInput => {
@@ -134,7 +128,6 @@ class SingInScreen extends React.Component {
   };
 
   handleSubmit = () => {
-    console.log(this.state);
     fetch("https://ea862c3d.ngrok.io/users", {
       method: "POST",
       headers: {
@@ -184,6 +177,7 @@ class SingInScreen extends React.Component {
         </View>
         <View>
           <TextInput
+            secureTextEntry={true}
             style={styles.textInput}
             placeholder="enter password"
             maxLength={40}
@@ -198,6 +192,41 @@ class SingInScreen extends React.Component {
               <Text style={styles.saveButtonText}>Sign In</Text>
             </TouchableOpacity>
           </View>
+        </View>
+        <View>
+          <CheckBox
+            title="channel1"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={this.state.ChannelRadioButton === "channel1"}
+            onPress={() => this.setState({ ChannelRadioButton: "channel1" })}
+          />
+          <Text>channel1</Text>
+          <CheckBox
+            title="channel1"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={this.state.ChannelRadioButton === "channel1"}
+            onPress={() => this.setState({ ChannelRadioButton: "channel1" })}
+          />
+          <Text>channel2</Text>
+          <CheckBox
+            center
+            title="channel1"
+            // checkedIcon="dot-circle-o"
+            // uncheckedIcon="circle-o"
+            checked={this.state.ChannelRadioButton === "channel1"}
+            onPress={() => this.setState({ ChannelRadioButton: "channel1" })}
+          />
+          <Text>channel3</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={() => this.props.navigation.navigate("Home")}
+          >
+            <Text style={styles.saveButtonText}>Submit Channels</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -245,7 +274,7 @@ const styles = StyleSheet.create({
 const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
-    Details: DetailsScreen,
+    Channels: ChannelsScreen,
     SignIn: SingInScreen,
     ChannelNotifications: ChannelNotificationsScreen
   },
