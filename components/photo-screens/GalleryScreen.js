@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { FileSystem, MediaLibrary, Permissions } from 'expo';
 import { MaterialIcons } from '@expo/vector-icons';
 import Photo from './Photo';
-import config from "./config";
+import config from "../../config";
 
 import * as firebase from "firebase/app";
 import "firebase/storage";

@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CheckBox from 'react-native-check-box'
 import '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default class UploadToChannels extends React.Component {
@@ -26,27 +27,31 @@ export default class UploadToChannels extends React.Component {
         const { channel_names } = this.state
         console.log(channel_names)
         return (
-            <View style={{ flex: 1, alignItems: 'center' }}>
+            <View style={{ flex: 1, alignItems: 'center', }}>
                 <Text>Share to Channels</Text>
                 <View style={{ flex: 1, alignItems: 'left', alignSelf: "stretch" }}>
                     {channel_names.map(channel => {
                         return <View
                             key={channel}
-                            style={{ flex: 1, borderColor: 'black', borderWidth: 2, borderRadius: 5, alignSelf: "stretch", margin: 5, padding: 15 }}
+                            style={{ flex: 1, alignSelf: "stretch", margin: 5 }}
+                        ><LinearGradient
+                            colors={['#ADDDCE', '#E6B655']}
+                            style={{ flex: 1, alignSelf: "stretch", borderRadius: 5, padding: 15 }}
                         >
-                            <CheckBox
+                                <CheckBox
 
-                                onClick={() => {
-                                    this.setState({
-                                        isChecked: !this.state.isChecked
-                                    })
-                                }}
-                                isChecked={this.state.isChecked}
-                                rightText={channel}
-                            /></View>
+                                    onClick={() => {
+                                        this.setState({
+                                            isChecked: !this.state.isChecked
+                                        })
+                                    }}
+                                    isChecked={this.state.isChecked}
+                                    rightText={channel}
+                                /></LinearGradient>
+                        </View>
                     })}
                 </View>
-            </View>
+            </View >
         );
     }
 }
