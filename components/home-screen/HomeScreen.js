@@ -14,19 +14,23 @@ export default class HomeScreen extends React.Component {
                 <Text>HOMEPAGE</Text>
                 <Image source={require('../../logos/logo-transparent-background.png')} />
                 <Button
-                    title="Users=Channels"
-                    onPress={() => this.props.navigation.navigate("Details")}
+                    title="SignInScreen"
+                    onPress={() => this.props.navigation.navigate("SignInScreen")}
                 />
                 <Button
-                    title="SignIn"
-                    onPress={() => this.props.navigation.navigate("SignIn")}
+                    title="AllChannels"
+                    onPress={() => this.props.navigation.navigate("AllChannels")}
                 />
                 <Button
-                    title="Map"
-                    onPress={() => this.props.navigation.navigate("Map")}
+                    title="RegisterScreen"
+                    onPress={() => this.props.navigation.navigate("RegisterScreen")}
                 />
                 <Button
-                    title="Take a photo!"
+                    title="MapScreen"
+                    onPress={() => this.props.navigation.navigate("MapScreen")}
+                />
+                <Button
+                    title="PhotoScreen"
                     onPress={() => this.props.navigation.navigate('PhotoScreen')}
                 />
             </View>

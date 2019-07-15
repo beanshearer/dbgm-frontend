@@ -7,19 +7,21 @@ import GalleryScreen from "./components/photo-screens/GalleryScreen"
 import HomeScreen from "./components/home-screen/HomeScreen"
 import AllChannels from "./components/all-channels-screen/AllChannels"
 import RegisterScreen from "./components/register-screen/RegisterScreen"
+import SignInScreen from "./components/sign-in-screen/SignInScreen"
 
 const AppNavigator = createStackNavigator(
   {
-    Home: HomeScreen,
-    Details: AllChannels,
-    SignIn: RegisterScreen,
-    Map: MapScreen,
+    HomeScreen,
+    AllChannels,
+    RegisterScreen,
+    SignInScreen,
+    MapScreen,
     PhotoScreen,
     UploadToChannels,
     GalleryScreen
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "HomeScreen"
   }
 );
 
