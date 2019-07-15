@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   DisplayRoles
 } from "react-native";
+import Map from "./Map";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import { FlatList } from "react-native-gesture-handler";
 
@@ -17,7 +18,7 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Home Screen</Text>
+        <Text>home</Text>
         <Button
           title="Users=Channels"
           onPress={() => this.props.navigation.navigate("Details")}
@@ -25,6 +26,10 @@ class HomeScreen extends React.Component {
         <Button
           title="SignIn"
           onPress={() => this.props.navigation.navigate("SignIn")}
+        />
+        <Button
+          title="Map"
+          onPress={() => this.props.navigation.navigate("Map")}
         />
       </View>
     );
@@ -247,7 +252,8 @@ const AppNavigator = createStackNavigator(
     Home: HomeScreen,
     Details: DetailsScreen,
     SignIn: SingInScreen,
-    ChannelNotifications: ChannelNotificationsScreen
+    ChannelNotifications: ChannelNotificationsScreen,
+    Map: Map
   },
   {
     initialRouteName: "Home"
