@@ -13,13 +13,9 @@ import {
 import Map from "./Map";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import { FlatList } from "react-native-gesture-handler";
-import PhotoScreen from "./PhotoScreen";
-import UploadToChannels from "./UploadToChannels";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import PhotoScreen from "./PhotoScreen";
-import UploadToChannels from "./UploadToChannels";
-import PhotoScreen from "./PhotoScreen"
 import UploadToChannels from "./UploadToChannels"
 import GalleryScreen from "./GalleryScreen"
 
@@ -86,8 +82,8 @@ class HomeScreen extends React.Component {
           onPress={() => this.props.navigation.navigate("PhotoScreen")}
           title="Go to Details"
           onPress={() => this.props.navigation.navigate("PhotoScreen")}
-/>
-<Button
+        />
+        <Button
           title="Take a photo!"
           onPress={() => this.props.navigation.navigate('PhotoScreen')}
 

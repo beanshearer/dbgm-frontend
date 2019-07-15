@@ -78,7 +78,7 @@ export default class GalleryScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
     },
     rightButton: {
         position: 'absolute',
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#4630EB',
+        // backgroundColor: '#4630EB',
     },
     pictures: {
         flex: 1,
