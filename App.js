@@ -13,12 +13,55 @@ import {
 import Map from "./Map";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import { FlatList } from "react-native-gesture-handler";
+import PhotoScreen from "./PhotoScreen";
+import UploadToChannels from "./UploadToChannels";
+import { Notifications } from "expo";
+import * as Permissions from "expo-permissions";
 
 class HomeScreen extends React.Component {
+  async registerForPushNotificationsAsync() {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== "granted") {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== "granted") {
+      return;
+    }
+
+    let token = await Notifications.getExpoPushTokenAsync();
+
+    return fetch(PUSH_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        token: {
+          value: token
+        },
+        user: {
+          username: "ladysneezes"
+        }
+      })
+    });
+  }
+
   render() {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>home</Text>
+        <Text>HOMEPAGE</Text>
         <Button
           title="Users=Channels"
           onPress={() => this.props.navigation.navigate("Details")}
@@ -31,8 +74,16 @@ class HomeScreen extends React.Component {
           title="Map"
           onPress={() => this.props.navigation.navigate("Map")}
         />
+        <Button
+          title="Camera"
+          onPress={() => this.props.navigation.navigate("PhotoScreen")}
+        />
       </View>
     );
+  }
+
+  componentDidMount() {
+    this.registerForPushNotificationsAsync();
   }
 }
 
@@ -56,7 +107,6 @@ class DetailsScreen extends React.Component {
   };
 
   render() {
-    console.log(this.state.users, "state");
     return (
       // <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <View style={styles.container}>
@@ -83,7 +133,6 @@ class DetailsScreen extends React.Component {
 
   componentDidMount() {
     this.getUSers();
-    // console.log(this.state.users, "state");
   }
 }
 
@@ -139,7 +188,6 @@ class SingInScreen extends React.Component {
   };
 
   handleSubmit = () => {
-    console.log(this.state);
     fetch("https://ea862c3d.ngrok.io/users", {
       method: "POST",
       headers: {
@@ -253,7 +301,10 @@ const AppNavigator = createStackNavigator(
     Details: DetailsScreen,
     SignIn: SingInScreen,
     ChannelNotifications: ChannelNotificationsScreen,
-    Map: Map
+    Map: Map,
+    Home: HomeScreen,
+    PhotoScreen,
+    UploadToChannels
   },
   {
     initialRouteName: "Home"
