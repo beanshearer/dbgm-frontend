@@ -17,6 +17,8 @@ import PhotoScreen from "./PhotoScreen";
 import UploadToChannels from "./UploadToChannels";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
+import PhotoScreen from "./PhotoScreen";
+import UploadToChannels from "./UploadToChannels";
 
 class HomeScreen extends React.Component {
   async registerForPushNotificationsAsync() {
@@ -76,6 +78,8 @@ class HomeScreen extends React.Component {
         />
         <Button
           title="Camera"
+          onPress={() => this.props.navigation.navigate("PhotoScreen")}
+          title="Go to Details"
           onPress={() => this.props.navigation.navigate("PhotoScreen")}
         />
       </View>
@@ -302,7 +306,6 @@ const AppNavigator = createStackNavigator(
     SignIn: SingInScreen,
     ChannelNotifications: ChannelNotificationsScreen,
     Map: Map,
-    Home: HomeScreen,
     PhotoScreen,
     UploadToChannels
   },
