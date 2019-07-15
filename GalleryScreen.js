@@ -56,6 +56,7 @@ export default class GalleryScreen extends React.Component {
         />;
 
     render() {
+        console.log(this.props)
         return (
             <View style={styles.container}>
                 <View
@@ -66,7 +67,7 @@ export default class GalleryScreen extends React.Component {
                 <TouchableOpacity style={styles.leftButton} onPress={this.props.onPress}>
                     <MaterialIcons name="arrow-back" size={25} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.rightButton} onPress={this.saveToGallery}>
+                <TouchableOpacity style={styles.rightButton} onPress={() => this.props.navigation.navigate('UploadToChannels')}>
                     <Text style={styles.whiteText}>Share</Text>
                 </TouchableOpacity>
             </View>
