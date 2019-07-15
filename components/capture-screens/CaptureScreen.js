@@ -1,22 +1,18 @@
-import { Constants, Camera, FileSystem, Permissions, BarCodeScanner } from 'expo';
+import { Camera, Permissions } from 'expo';
+import Constants from 'expo-constants';
+import * as FileSystem from 'expo-file-system'
 import React from 'react';
 import {
-  Alert,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  Slider,
-  Platform
 } from 'react-native';
 import GalleryScreen from './GalleryScreen';
 import isIPhoneX from 'react-native-is-iphonex';
 import {
   Ionicons,
-  MaterialIcons,
-  Foundation,
-  MaterialCommunityIcons,
-  Octicons
+  MaterialIcons
 } from '@expo/vector-icons';
 
 
@@ -54,7 +50,7 @@ const wbIcons = {
   incandescent: 'wb-incandescent',
 };
 
-export default class CameraScreen extends React.Component {
+export default class CaptureScreen extends React.Component {
   state = {
     flash: 'off',
     zoom: 0,

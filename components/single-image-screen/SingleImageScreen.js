@@ -2,16 +2,14 @@
 import React from "react";
 import {
     View,
-    Text,
-    Button,
-    Image
+    Text
 } from "react-native";
 
-export default class HomeScreen extends React.Component {
+export default class SingleImageScreen extends React.Component {
     render() {
         return (
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <Text>HomeScreen</Text>
+                <Text>SingleImageScreen</Text>
             </View>
         );
     }

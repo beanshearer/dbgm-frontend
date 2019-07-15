@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
+    Image
 } from "react-native";
 
 export default class SignInScreen extends React.Component {
@@ -48,6 +49,7 @@ export default class SignInScreen extends React.Component {
     render() {
         return (
             <View>
+                <Image source={require('../../logos/logo-transparent-background.png')} />
                 <View>
                     <TextInput
                         style={styles.textInput}

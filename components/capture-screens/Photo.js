@@ -1,6 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Image, StyleSheet } from 'react-native';
 
 export default class Photo extends React.Component {
     state = {
