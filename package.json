@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "expo": "^33.0.0",
+    "expokit": "^33.0.4",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
@@ -17,7 +18,8 @@
     "react-navigation": "^3.11.0"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.1.1"
+    "babel-preset-expo": "^5.1.1",
+    "react-native-unimodules": "^0.4.2"
   },
   "private": true
 }
