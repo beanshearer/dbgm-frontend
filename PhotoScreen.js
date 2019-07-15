@@ -143,7 +143,8 @@ export default class CameraScreen extends React.Component {
   }
 
   renderGallery() {
-    return <GalleryScreen onPress={this.toggleView.bind(this)} />;
+    console.log(this.props)
+    return <GalleryScreen onPress={this.toggleView.bind(this)} navigation={this.props.navigation} />;
   }
 
   renderNoPermissions = () =>
