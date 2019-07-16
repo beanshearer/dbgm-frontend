@@ -14,12 +14,9 @@ import HomeScreen from "./components/home-screen/HomeScreen"
 import AccountManagementScreen from "./components/acount-management-screen/AccountManagementScreen"
 import config from "./config";
 import * as firebase from "firebase/app";
+import LoadingScreen from "./components/loading-screen/LoadingScreen"
 
 firebase.initializeApp(config);
-
-
-
-
 
 const AppNavigator = createStackNavigator(
   {
@@ -34,33 +31,18 @@ const AppNavigator = createStackNavigator(
     MapScreen,
     CaptureScreen,
     UploadToChannels,
-    GalleryScreen
+    GalleryScreen,
+    LoadingScreen
   },
   {
-    initialRouteName: "NavigationScreen"
+    initialRouteName: "LoadingScreen"
   }
 );
 
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
-  state = {
-    username: "",
-  }
-
   render() {
     return <AppContainer />;
-  }
-
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        console.log('User is signed in.')
-        const { username } = user
-        console.log(user)
-      } else {
-        console.log('User is signed out')
-      }
-    })
   }
 }

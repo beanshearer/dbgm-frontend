@@ -18,19 +18,11 @@ export default class SignInScreen extends React.Component {
     };
 
     handleUsernameInput = email => {
-        this.setState(prevState => {
-            return {
-                email
-            };
-        });
+        this.setState({ email });
     };
 
     handlePasswordInput = password => {
-        this.setState(prevState => {
-            return {
-                password
-            };
-        });
+        this.setState({ password });
     };
 
     handleSubmit = () => {
@@ -44,30 +36,10 @@ export default class SignInScreen extends React.Component {
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 console.log('User is signed in.')
-                // var displayName = user.displayName;
-                // var email = user.email;
-                // var emailVerified = user.emailVerified;
-                // var photoURL = user.photoURL;
-                // var isAnonymous = user.isAnonymous;
-                // var uid = user.uid;
-                // var providerData = user.providerData;
             } else {
                 console.log('User is signed out')
             }
         });
-        // fetch("https://ea862c3d.ngrok.io/users", {
-        //     method: "POST",
-        //     headers: {
-        //         Accept: "application/json",
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify({
-        //         username: {
-        //             email: this.state.emailInput,
-
-        //         }
-        //     })
-        // });
     };
 
     render() {
