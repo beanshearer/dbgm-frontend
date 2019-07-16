@@ -32,8 +32,14 @@ export default class AllChannels extends React.Component {
     return fetch("https://ea862c3d.ngrok.io/users/gloria07")
       .then(response => response.json())
       .then(responseJson => {
+        console.log(responseJson.subscribed_channels, "SBBBBBBBBBB");
         this.setState({
           loggedUser: responseJson
+          //   chosen: responseJson.subscribed_channels.map(channel => {
+          //     return {
+          //       [channel]: true
+          //     };
+          //   })
         });
       })
       .catch(error => {
@@ -70,7 +76,14 @@ export default class AllChannels extends React.Component {
                         });
                       } else
                         this.setState({
-                          chosen: { ...this.state.chosen, [channel]: false }
+                          chosen: { ...this.state.chosen, [channel]: false },
+                          loggedUser: {
+                            subscribed_channels: this.state.loggedUser.subscribed_channels.filter(
+                              function(item) {
+                                return item !== channel;
+                              }
+                            )
+                          }
                         });
                     }}
                     isChecked={this.state.chosen[channel]}
