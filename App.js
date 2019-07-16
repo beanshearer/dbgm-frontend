@@ -1,3 +1,4 @@
+
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import React from "react";
 import MapScreen from "./components/map-screen/MapScreen";
@@ -15,8 +16,10 @@ import AccountManagementScreen from "./components/acount-management-screen/Accou
 import config from "./config";
 import * as firebase from "firebase/app";
 import LoadingScreen from "./components/loading-screen/LoadingScreen"
+import SplashScreen from './components/splash-screen/SplashScreen';
 
 firebase.initializeApp(config);
+
 
 const AppNavigator = createStackNavigator(
   {
@@ -32,10 +35,11 @@ const AppNavigator = createStackNavigator(
     CaptureScreen,
     UploadToChannels,
     GalleryScreen,
-    LoadingScreen
+    LoadingScreen,
+    SplashScreen
   },
   {
-    initialRouteName: "LoadingScreen"
+    initialRouteName: 'NavigationScreen'
   }
 );
 
