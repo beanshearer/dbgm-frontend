@@ -12,7 +12,7 @@ export default class SplashScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>NearBy</Text>
+        <Text style={styles.header}>nearBy</Text>
         <View style={styles.logoContainer}>
           <Image
             style={styles.logo}
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     paddingRight: 60
   },
   header: {
-    fontSize: 25,
+    fontSize: 30,
     color: '#9E280E',
     textAlign: 'center',
     paddingBottom: 10,

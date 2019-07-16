@@ -61,7 +61,7 @@ export default class RegisterScreen extends React.Component {
           style={styles.textInput}
           returnKeyLabel="next"
           maxLength={40}
-          placeholder="E-mail"
+          placeholder="Email"
           keyboardType="email-address"
           onChangeText={email => this.setState({ email })}
           value={email}
