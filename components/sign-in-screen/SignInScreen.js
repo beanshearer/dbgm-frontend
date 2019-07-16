@@ -1,4 +1,5 @@
 import React from "react";
+React.createContext('light');
 import {
     View,
     Text,
@@ -7,42 +8,37 @@ import {
     TouchableOpacity,
     Image
 } from "react-native";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 
 export default class SignInScreen extends React.Component {
     state = {
-        username: "",
+        email: "",
         password: ""
     };
 
-    handleUsernameInput = usernameInput => {
-        this.setState(prevState => {
-            return {
-                username: usernameInput
-            };
-        });
+    handleUsernameInput = email => {
+        this.setState({ email });
     };
 
-    handlePasswordInput = passwordInput => {
-        this.setState(prevState => {
-            return {
-                password: passwordInput
-            };
-        });
+    handlePasswordInput = password => {
+        this.setState({ password });
     };
 
     handleSubmit = () => {
-        fetch("https://ea862c3d.ngrok.io/users", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username: {
-                    username: this.state.username,
-                    email: this.state.emailInput
-                }
-            })
+        const { email, password } = this.state;
+        firebase.auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(res => { console.log(res) })
+            .catch(function (error) {
+                console.log(error.code);
+            });
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                console.log('User is signed in.')
+            } else {
+                console.log('User is signed out')
+            }
         });
     };
 
