@@ -13,13 +13,13 @@ export default class LoadingScreen extends React.Component {
     }
 
     componentDidMount() {
-        let username = null
+        let username = ""
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 username = user.displayName
                 this.setState({ username })
             } else {
-                username = null
+                username = ""
                 this.setState({ username })
             }
         })
@@ -30,7 +30,7 @@ export default class LoadingScreen extends React.Component {
         if (username) {
             this.props.navigation.navigate("NavigationScreen")
         } else {
-            this.props.navigation.navigate("SignInScreen")
+            this.props.navigation.navigate("SplashScreen")
         }
     }
 }
