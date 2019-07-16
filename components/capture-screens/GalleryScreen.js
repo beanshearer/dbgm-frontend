@@ -4,14 +4,7 @@ import { MediaLibrary, Permissions } from 'expo';
 import * as FileSystem from 'expo-file-system'
 import { MaterialIcons } from '@expo/vector-icons';
 import Photo from './Photo';
-import config from "../../config";
 
-import * as firebase from "firebase/app";
-import "firebase/storage";
-
-firebase.initializeApp(config);
-const storage = firebase.storage();
-const storageRef = storage.ref("images");
 const CURRENT_PHOTO = FileSystem.documentDirectory + 'photos';
 
 export default class GalleryScreen extends React.Component {
@@ -23,31 +16,6 @@ export default class GalleryScreen extends React.Component {
     componentDidMount = async () => {
         const photos = await FileSystem.readDirectoryAsync(CURRENT_PHOTO);
         this.setState({ photo: photos[photos.indexOf('current-photo.jpg')] });
-    };
-
-    saveToGallery = async () => {
-        const { photo } = this.state;
-        const photoUri = CURRENT_PHOTO + "/" + photo
-        if (photo.length > 0) {
-            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-            if (status !== 'granted') {
-                throw new Error('Denied CAMERA_ROLL permissions!');
-            }
-
-            const promise = MediaLibrary.createAssetAsync(photoUri);
-
-            let response = await fetch(photoUri)
-            const blob = await response.blob()
-            promise.then(() => {
-                const spaceRef = storageRef.child(JSON.stringify(promise['_55']['creationTime']));
-                spaceRef.put(blob).then(function (snapshot) {
-                    console.log('Uploaded a blob or file!');
-                });
-            })
-
-            alert('Successfully shared!');
-        }
     };
 
     renderPhoto = fileName =>
