@@ -9,15 +9,12 @@ export default class LoadingScreen extends React.Component {
     }
 
     render() {
-        const { username } = this.state
-        console.log(username)
         return <Text>Loading</Text>;
     }
 
     componentDidMount() {
         let username = null
         firebase.auth().onAuthStateChanged((user) => {
-            console.log(user)
             if (user) {
                 username = user.displayName
                 this.setState({ username })
