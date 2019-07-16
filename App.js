@@ -12,6 +12,10 @@ import SingleChannelScreen from "./components/single-channel-screen/SingleChanne
 import SingleImageScreen from "./components/single-image-screen/SingleImageScreen"
 import HomeScreen from "./components/home-screen/HomeScreen"
 import AccountManagementScreen from "./components/acount-management-screen/AccountManagementScreen"
+import config from "./config";
+import * as firebase from "firebase/app";
+
+firebase.initializeApp(config);
 
 const AppNavigator = createStackNavigator(
   {
@@ -36,7 +40,23 @@ const AppNavigator = createStackNavigator(
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
+  state = {
+    username: "",
+  }
+
   render() {
     return <AppContainer />;
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        console.log('User is signed in.')
+        const { username } = user
+        console.log(user)
+      } else {
+        console.log('User is signed out')
+      }
+    })
   }
 }

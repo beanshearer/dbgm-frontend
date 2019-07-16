@@ -6,8 +6,11 @@ import {
     TextInput,
     TouchableOpacity,
 } from "react-native";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 
 export default class RegisterScreen extends React.Component {
+
     state = {
         name: "",
         username: "",
@@ -15,39 +18,53 @@ export default class RegisterScreen extends React.Component {
         password: ""
     };
 
-    handleNameInput = nameInput => {
+    handleNameInput = name => {
         this.setState(prevState => {
             return {
-                name: nameInput
+                name
             };
         });
     };
 
-    handleUsernameInput = usernameInput => {
+    handleUsernameInput = username => {
         this.setState(prevState => {
             return {
-                username: usernameInput
+                username
             };
         });
     };
 
-    handleEmailInput = emailInput => {
+    handleEmailInput = email => {
         this.setState(prevState => {
             return {
-                email: emailInput
+                email
             };
         });
     };
 
-    handlePasswordInput = passwordInput => {
+    handlePasswordInput = password => {
         this.setState(prevState => {
             return {
-                password: passwordInput
+                password
             };
         });
     };
 
     handleSubmit = () => {
+        console.log('here')
+        const { email, password, username } = this.state;
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                const user = firebase.auth().currentUser;
+                user.updateProfile({ displayName: username })
+            })
+            .then(function () {
+                const user = firebase.auth().currentUser;
+                console.log('user added', user)
+            })
+            .catch(function (error) {
+                console.log(error.message)
+            });
         fetch("https://ea862c3d.ngrok.io/users", {
             method: "POST",
             headers: {
@@ -58,8 +75,8 @@ export default class RegisterScreen extends React.Component {
                 username: {
                     name: this.state.name,
                     username: this.state.username,
-                    email: this.state.emailInput,
-                    password: this.state.passwordInput
+                    email: this.state.email,
+                    password: this.state.password
                 }
             })
         });

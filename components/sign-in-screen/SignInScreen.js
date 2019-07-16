@@ -1,4 +1,5 @@
 import React from "react";
+React.createContext('light');
 import {
     View,
     Text,
@@ -7,43 +8,66 @@ import {
     TouchableOpacity,
     Image
 } from "react-native";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 
 export default class SignInScreen extends React.Component {
     state = {
-        username: "",
+        email: "",
         password: ""
     };
 
-    handleUsernameInput = usernameInput => {
+    handleUsernameInput = email => {
         this.setState(prevState => {
             return {
-                username: usernameInput
+                email
             };
         });
     };
 
-    handlePasswordInput = passwordInput => {
+    handlePasswordInput = password => {
         this.setState(prevState => {
             return {
-                password: passwordInput
+                password
             };
         });
     };
 
     handleSubmit = () => {
-        fetch("https://ea862c3d.ngrok.io/users", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username: {
-                    username: this.state.username,
-                    email: this.state.emailInput
-                }
-            })
+        const { email, password } = this.state;
+        firebase.auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(res => { console.log(res) })
+            .catch(function (error) {
+                console.log(error.code);
+            });
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                console.log('User is signed in.')
+                // var displayName = user.displayName;
+                // var email = user.email;
+                // var emailVerified = user.emailVerified;
+                // var photoURL = user.photoURL;
+                // var isAnonymous = user.isAnonymous;
+                // var uid = user.uid;
+                // var providerData = user.providerData;
+            } else {
+                console.log('User is signed out')
+            }
         });
+        // fetch("https://ea862c3d.ngrok.io/users", {
+        //     method: "POST",
+        //     headers: {
+        //         Accept: "application/json",
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify({
+        //         username: {
+        //             email: this.state.emailInput,
+
+        //         }
+        //     })
+        // });
     };
 
     render() {
