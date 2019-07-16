@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, Button } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Image } from "react-native";
 import CheckBox from "react-native-check-box";
 import "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -56,20 +56,61 @@ export default class UploadToChannels extends React.Component {
         const spaceRef = storageRef.child(
           JSON.stringify(promise["_55"]["creationTime"])
         );
-        spaceRef.put(blob).then(snapshot => {
-          const { path } = snapshot.ref.location;
+        spaceRef
+          .put(blob)
+          .then(snapshot => {
+            const { path } = snapshot.ref.location;
 
-          return firebase
-            .storage()
-            .ref(`${path}`)
-            .getDownloadURL()
-            .then(url => {
-              this.setState({ downloadUrl: url });
+            return firebase
+              .storage()
+              .ref(`${path}`)
+              .getDownloadURL()
+              .then(url => {
+                this.setState({ downloadUrl: url });
+              });
+          })
+          .then(() => {
+            return fetch("https://ea862c3d.ngrok.io/images", {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                caption: this.state.text,
+                geolocation: this.props.navigation.state.params.photoLocation,
+                relevant_channels: Object.keys(this.state.chosen).filter(
+                  key => this.state.chosen[key] === true
+                ),
+                event_img: this.state.downloadUrl,
+                id: Date.now()
+              })
             });
-        });
+          })
+          .then(() => {
+            this.props.navigation.navigate("SingleImageScreen");
+          });
       });
     }
   };
+
+  //   sendImageInfoToDb = () => {
+  //     console.log(this.state);
+  //     return fetch("https://ea862c3d.ngrok.io/images", {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json"
+  //       },
+  //       body: JSON.stringify({
+  //         caption: this.state.text,
+  //         geolocation: this.props.navigation.state.params.photoLocation,
+  //         relevant_channels: ["GoldenRod"],
+  //         event_img: this.state.downloadUrl,
+  //         id: "mike-test-img2"
+  //       })
+  //     });
+  //   };
 
   render() {
     const { channel_names } = this.state;
@@ -117,7 +158,7 @@ export default class UploadToChannels extends React.Component {
               onChangeText={text => this.setState({ text })}
               value={this.state.text}
             />
-            <Button title="Share" onPress={() => this.saveToGallery().then()} />
+            <Button title="Share" onPress={this.saveToGallery} />
           </View>
         </View>
       </View>
