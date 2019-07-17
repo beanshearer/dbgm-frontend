@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
-import { MediaLibrary, Permissions } from "expo";
+import { MediaLibrary } from "expo";
+import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
 import { MaterialIcons } from "@expo/vector-icons";
 import Photo from "./Photo";
