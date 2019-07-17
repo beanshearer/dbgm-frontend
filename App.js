@@ -1,6 +1,5 @@
 
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import { Image } from 'react-native';
 import React from "react";
 import MapScreen from "./components/map-screen/MapScreen";
 import CaptureScreen from "./components/capture-screens/CaptureScreen";

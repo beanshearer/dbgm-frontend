@@ -56,7 +56,8 @@ export default class RegisterScreen extends React.Component {
                         avatar: "null",
                         subscribed_channels: '[]',
                         geolocation: "null",
-                        notifications: "null"
+                        notifications: "null",
+                        token: "null"
                     })
                 })
             })
