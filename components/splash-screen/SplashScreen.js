@@ -12,7 +12,7 @@ export default class SplashScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>nearBy</Text>
+        <Text style={styles.header}>NEARBY</Text>
         <View style={styles.logoContainer}>
           <Image
             style={styles.logo}
@@ -23,7 +23,7 @@ export default class SplashScreen extends React.Component {
           style={styles.button}
           onPress={() => this.props.navigation.navigate('RegisterScreen')}
         >
-          <Text style={styles.btntext}>CREATE NEW ACCOUNT</Text>
+          <Text style={styles.btntext}>NEW ACCOUNT</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 30,
-    color: '#9E280E',
+    color: '#CA7E8D',
     textAlign: 'center',
     paddingBottom: 10,
     fontWeight: 'bold',

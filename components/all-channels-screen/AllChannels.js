@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import CheckBox from 'react-native-check-box'
 import * as firebase from "firebase/app";
 import "firebase/auth"
+import registerForPushNotificationsAsync from "../../registerForPushNotificationsAsync"
 
 export default class AllChannels extends React.Component {
   state = {
@@ -33,6 +34,7 @@ export default class AllChannels extends React.Component {
     };
   };
 
+
   getChannel = () => {
     return fetch('https://ea862c3d.ngrok.io/channels')
       .then(response => response.json())
@@ -54,6 +56,7 @@ export default class AllChannels extends React.Component {
         this.setState({ loggedUser });
         return loggedUser
       }).then(loggedUser => {
+        registerForPushNotificationsAsync(loggedUser)
         console.log(loggedUser.subscribed_channels)
         let channels = ""
         if (loggedUser.subscribed_channels.length > 0) {
@@ -120,6 +123,18 @@ export default class AllChannels extends React.Component {
         this.setState({ username: "" })
       }
     })
+    return fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify([{
+        "to": "ExponentPushToken[DhnqAMOmU5m55epfiOGkX9]",
+        "sound": "default",
+        "body": "Hello world!"
+      }])
+    }).catch(err => { console.log(err) })
   }
 
   componentDidUpdate() {
