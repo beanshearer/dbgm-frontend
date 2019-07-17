@@ -54,10 +54,9 @@ export default class AllChannels extends React.Component {
         this.setState({ loggedUser });
         return loggedUser
       }).then(loggedUser => {
-        const
+        const channels = ""
         if (loggedUser.subscribed_channels) {
           channels = JSON.parse(loggedUser.subscribed_channels)
-
         }
         if (channels) {
           channels.map(channel => {
