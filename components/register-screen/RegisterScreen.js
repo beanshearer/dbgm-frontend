@@ -52,9 +52,13 @@ export default class RegisterScreen extends React.Component {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        name, username, email, password, avatar: null, subscribed_channels: '[]', geolocation: null, notifications: null
+                        name, username, email, password,
+                        avatar: "null",
+                        subscribed_channels: '[]',
+                        geolocation: "null",
+                        notifications: "null"
                     })
-                }).catch(err => { console.log(err) })
+                })
             })
             .then(() => {
                 console.log('user added')

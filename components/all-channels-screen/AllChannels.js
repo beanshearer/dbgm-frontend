@@ -47,20 +47,18 @@ export default class AllChannels extends React.Component {
       });
   };
 
-  getUserByUsername = () => {
-    return fetch("https://ea862c3d.ngrok.io/users/gloria07")
+  getUserByUsername = (username) => {
+    return fetch(`https://ea862c3d.ngrok.io/users/${username}`)
       .then(response => response.json())
       .then(loggedUser => {
         this.setState({ loggedUser });
         return loggedUser
       }).then(loggedUser => {
-        const channels = ""
-        if (loggedUser.subscribed_channels) {
+        console.log(loggedUser.subscribed_channels)
+        let channels = ""
+        if (loggedUser.subscribed_channels.length > 0) {
           channels = JSON.parse(loggedUser.subscribed_channels)
-        }
-        if (channels) {
           channels.map(channel => {
-            console.log(channel)
             this.setState({
               chosen: { ...this.state.chosen, [channel]: true }
             })
@@ -85,8 +83,7 @@ export default class AllChannels extends React.Component {
   }
 
   render() {
-    const { channel_names, username, loggedUser } = this.state;
-    // console.log(channel_names, username, loggedUser)
+    const { channel_names, loggedUser } = this.state;
 
     return (
       <View style={{ flex: 1, alignItems: 'center', backgroundColor: "#ADDDCE" }}>
@@ -118,14 +115,14 @@ export default class AllChannels extends React.Component {
       if (user) {
         username = user.displayName
         this.setState({ username })
-        this.getUserByUsername()
+        this.getUserByUsername(username)
       } else {
         this.setState({ username: "" })
       }
     })
   }
 
-  componentWillUnmount() {
+  componentDidUpdate() {
     const { chosen, loggedUser } = this.state;
     const keys = Object.keys(chosen)
     const subscribedChannels = keys.filter(channel => {
@@ -134,7 +131,7 @@ export default class AllChannels extends React.Component {
     const { subscribed_channels, ...restOfUser } = loggedUser
     const updatedUser = { ...restOfUser, subscribed_channels: JSON.stringify(subscribedChannels) }
     console.log(updatedUser)
-    fetch("https://ea862c3d.ngrok.io/users", {
+    return fetch("https://ea862c3d.ngrok.io/users", {
       method: "POST",
       headers: {
         Accept: "application/json",

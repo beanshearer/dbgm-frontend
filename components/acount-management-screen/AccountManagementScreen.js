@@ -10,8 +10,6 @@ import {
 import * as firebase from "firebase/app";
 import "firebase/auth"
 
-
-
 export default class AccountManagementScreen extends React.Component {
 
     static navigationOptions = ({ navigation }) => {
@@ -52,7 +50,7 @@ export default class AccountManagementScreen extends React.Component {
 
     signOut = () => {
         firebase.auth().signOut().then(() => {
-            this.props.navigation.navigate("LoadingScreen")
+            this.props.navigation.navigate("SplashScreen")
         }).catch(function (error) {
             // An error happened.
         });
