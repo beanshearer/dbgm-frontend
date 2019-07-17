@@ -18,7 +18,8 @@ export default class UploadToChannels extends React.Component {
     chosen: {},
     text: "",
     photo: null,
-    downloadUrl: ""
+    downloadUrl: "",
+    photoId: ""
   };
 
   componentDidMount = () => {
@@ -60,13 +61,14 @@ export default class UploadToChannels extends React.Component {
           .put(blob)
           .then(snapshot => {
             const { path } = snapshot.ref.location;
-
+            const pathArr = path.split("/");
+            const photoId = pathArr[pathArr.length - 1];
             return firebase
               .storage()
               .ref(`${path}`)
               .getDownloadURL()
               .then(url => {
-                this.setState({ downloadUrl: url });
+                this.setState({ downloadUrl: url, photoId });
               });
           })
           .then(() => {
@@ -83,12 +85,9 @@ export default class UploadToChannels extends React.Component {
                   key => this.state.chosen[key] === true
                 ),
                 event_img: this.state.downloadUrl,
-                id: Date.now()
+                id: this.state.photoId
               })
             });
-          })
-          .then(() => {
-            this.props.navigation.navigate("SingleImageScreen");
           });
       });
     }
@@ -158,7 +157,16 @@ export default class UploadToChannels extends React.Component {
               onChangeText={text => this.setState({ text })}
               value={this.state.text}
             />
-            <Button title="Share" onPress={this.saveToGallery} />
+            <Button
+              title="Share"
+              onPress={() => {
+                this.saveToGallery();
+                this.props.navigation.navigate("SingleImageScreen", {
+                  downloadUrl: this.state.downloadUrl,
+                  photoId: this.state.photoId
+                });
+              }}
+            />
           </View>
         </View>
       </View>
