@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TextInput, Button, Image } from "react-native";
 import CheckBox from "react-native-check-box";
 import "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
+// import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase/app";
 import "firebase/storage";
 import * as FileSystem from "expo-file-system";
@@ -59,8 +59,10 @@ export default class UploadToChannels extends React.Component {
         );
         spaceRef
           .put(blob)
+
           .then(snapshot => {
             const { path } = snapshot.ref.location;
+
             const pathArr = path.split("/");
             const photoId = pathArr[pathArr.length - 1];
             return firebase
@@ -72,6 +74,7 @@ export default class UploadToChannels extends React.Component {
               });
           })
           .then(() => {
+            console.log(this.state.downloadUrl, this.state.photoId);
             return fetch("https://ea862c3d.ngrok.io/images", {
               method: "POST",
               headers: {
@@ -88,28 +91,16 @@ export default class UploadToChannels extends React.Component {
                 id: this.state.photoId
               })
             });
-          });
+          })
+          .then(() =>
+            this.props.navigation.navigate("SingleImageScreen", {
+              downloadUrl: this.state.downloadUrl,
+              photoId: this.state.photoId
+            })
+          );
       });
     }
   };
-
-  //   sendImageInfoToDb = () => {
-  //     console.log(this.state);
-  //     return fetch("https://ea862c3d.ngrok.io/images", {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json"
-  //       },
-  //       body: JSON.stringify({
-  //         caption: this.state.text,
-  //         geolocation: this.props.navigation.state.params.photoLocation,
-  //         relevant_channels: ["GoldenRod"],
-  //         event_img: this.state.downloadUrl,
-  //         id: "mike-test-img2"
-  //       })
-  //     });
-  //   };
 
   render() {
     const { channel_names } = this.state;
@@ -124,13 +115,13 @@ export default class UploadToChannels extends React.Component {
                 key={channel}
                 style={{ flex: 1, alignSelf: "stretch", margin: 5 }}
               >
-                <LinearGradient
-                  colors={["#ADDDCE", "#E6B655"]}
+                <View
                   style={{
                     flex: 1,
                     alignSelf: "stretch",
                     borderRadius: 5,
-                    padding: 15
+                    padding: 15,
+                    backgroundColor: "#E6B655"
                   }}
                 >
                   <CheckBox
@@ -147,11 +138,11 @@ export default class UploadToChannels extends React.Component {
                     isChecked={this.state.chosen[channel]}
                     rightText={channel}
                   />
-                </LinearGradient>
+                </View>
               </View>
             );
           })}
-          <View style={{ flex: 0.5, alignSelf: "stretch", margin: 5 }}>
+          <View style={{ flex: 1, alignSelf: "stretch", margin: 5 }}>
             <TextInput
               style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
               onChangeText={text => this.setState({ text })}
@@ -161,10 +152,6 @@ export default class UploadToChannels extends React.Component {
               title="Share"
               onPress={() => {
                 this.saveToGallery();
-                this.props.navigation.navigate("SingleImageScreen", {
-                  downloadUrl: this.state.downloadUrl,
-                  photoId: this.state.photoId
-                });
               }}
             />
           </View>
