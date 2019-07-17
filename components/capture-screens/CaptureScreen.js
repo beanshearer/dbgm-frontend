@@ -1,4 +1,5 @@
-import { Camera, Permissions } from "expo";
+import { Camera } from "expo-camera";
+import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 import * as FileSystem from "expo-file-system";
 import React from "react";
