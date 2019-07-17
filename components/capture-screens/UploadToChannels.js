@@ -60,6 +60,7 @@ export default class UploadToChannels extends React.Component {
                 <Text>Share to Channels</Text>
                 <View style={{ flex: 1, alignItems: 'left', alignSelf: "stretch" }}>
                     {channel_names.map(channel => {
+                        console.log(channel)
                         return <View
                             key={channel}
                             style={{ flex: 1, alignSelf: "stretch", margin: 5 }}
@@ -68,7 +69,6 @@ export default class UploadToChannels extends React.Component {
                             style={{ flex: 1, alignSelf: "stretch", borderRadius: 5, padding: 15 }}
                         >
                                 <CheckBox
-
                                     onClick={() => {
                                         this.setState({
                                             [channel]: !this.state.channel

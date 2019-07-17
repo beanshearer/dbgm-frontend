@@ -42,9 +42,6 @@ const AppNavigator = createStackNavigator(
   {
     initialRouteName: 'LoadingScreen',
     defaultNavigationOptions: {
-      headerLeft: (
-        <Image source={require('./logos/logo-transparent-background.png')} style={{ width: 40, height: 40 }} />
-      ),
       headerStyle: {
         backgroundColor: '#E6B655',
       },
