@@ -1,4 +1,6 @@
+
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import { Image } from 'react-native';
 import React from "react";
 import MapScreen from "./components/map-screen/MapScreen";
 import CaptureScreen from "./components/capture-screens/CaptureScreen";
@@ -14,11 +16,10 @@ import HomeScreen from "./components/home-screen/HomeScreen"
 import AccountManagementScreen from "./components/acount-management-screen/AccountManagementScreen"
 import config from "./config";
 import * as firebase from "firebase/app";
+import LoadingScreen from "./components/loading-screen/LoadingScreen"
+import SplashScreen from './components/splash-screen/SplashScreen';
 
 firebase.initializeApp(config);
-
-
-
 
 
 const AppNavigator = createStackNavigator(
@@ -34,33 +35,28 @@ const AppNavigator = createStackNavigator(
     MapScreen,
     CaptureScreen,
     UploadToChannels,
-    GalleryScreen
+    GalleryScreen,
+    LoadingScreen,
+    SplashScreen
   },
   {
-    initialRouteName: "NavigationScreen"
+    initialRouteName: 'LoadingScreen',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#E6B655',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    },
   }
 );
 
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
-  state = {
-    username: "",
-  }
-
   render() {
     return <AppContainer />;
-  }
-
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        console.log('User is signed in.')
-        const { username } = user
-        console.log(user)
-      } else {
-        console.log('User is signed out')
-      }
-    })
   }
 }
