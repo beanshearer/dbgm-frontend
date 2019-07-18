@@ -48,7 +48,7 @@ export default class AllChannels extends React.Component {
     };
 
     getUserByUsername = (username) => {
-        if (this.props.navigation.state.params.newuser)
+        if (this.props.navigation.state.params)
             return fetch(`https://ea862c3d.ngrok.io/users/${username}`)
                 .then(response => {
                     if (response) {
@@ -129,7 +129,7 @@ export default class AllChannels extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.props.navigation.state.params.newuser) {
+        if (this.props.navigation.state.params) {
             const { chosen, loggedUser } = this.state;
             const keys = Object.keys(chosen)
             const subscribedChannels = keys.filter(channel => {

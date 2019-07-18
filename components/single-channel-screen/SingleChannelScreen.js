@@ -45,7 +45,7 @@ export default class SingleChannelScreen extends React.Component {
         const { images } = this.state;
         console.log(images)
         const channelImages = images.filter(image => {
-            return image['relevant_channels'][0] = channel
+            return image['relevant_channels'][0] === channel
         })
         console.log(channelImages)
         return (
@@ -86,7 +86,7 @@ export default class SingleChannelScreen extends React.Component {
                                             flex: 1,
                                             resizeMode: "center",
                                             height: 400,
-                                            width: 300,
+                                            width: 270,
                                             paddingLeft: - 20
                                         }}
                                     />
