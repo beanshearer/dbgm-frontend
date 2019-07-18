@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, Image, View } from "react-native";
 import * as firebase from "firebase/app";
 import "firebase/auth"
 
@@ -9,7 +9,12 @@ export default class LoadingScreen extends React.Component {
     }
 
     render() {
-        return <Text>Loading</Text>;
+        return (<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: "#ADDDCE" }}>
+            <Image
+                source={require('../../logos/logo-transparent-background.png')}
+            />
+            <Text>Loading...</Text>
+        </View>)
     }
 
     componentDidMount() {
@@ -19,8 +24,7 @@ export default class LoadingScreen extends React.Component {
                 username = user.displayName
                 this.setState({ username })
             } else {
-                username = ""
-                this.setState({ username })
+                this.setState({ username: "" })
             }
         })
     }
@@ -28,7 +32,7 @@ export default class LoadingScreen extends React.Component {
     componentDidUpdate() {
         const { username } = this.state;
         if (username) {
-            this.props.navigation.navigate("NavigationScreen")
+            this.props.navigation.navigate("HomeScreen")
         } else {
             this.props.navigation.navigate("SplashScreen")
         }
