@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import CheckBox from 'react-native-check-box'
 import * as firebase from "firebase/app";
 import "firebase/auth"
@@ -90,20 +90,22 @@ export default class AllChannels extends React.Component {
                 <Text
                     style={{ alignSelf: "stretch", margin: 5, padding: 5 }}
                 >{loggedUser.name} - Subscribed Channels</Text>
-                <View style={{ flex: 1, alignItems: 'left', alignSelf: "stretch" }}>
+                <ScrollView style={{ flex: 1, alignSelf: "stretch" }}>
                     {channel_names.map(channel => {
                         return <View
                             key={channel}
-                            style={{ flex: 1, alignSelf: "stretch", margin: 5, padding: 15, backgroundColor: "#E6B655", borderRadius: 5 }}
+                            style={{ flex: 1, alignSelf: "stretch", flexDirection: "row", margin: 5, padding: 15, backgroundColor: "#E6B655", borderRadius: 5 }}
                         >
                             <CheckBox
                                 onClick={() => this.onClick(channel)}
                                 isChecked={this.state.chosen[channel]}
-                                rightText={channel}
                             />
+                            <Text
+                                style={{ paddingLeft: 10 }}
+                            >{channel}</Text>
                         </View>
                     })}
-                </View>
+                </ScrollView>
             </View >
         );
     }
