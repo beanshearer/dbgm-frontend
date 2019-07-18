@@ -52,6 +52,17 @@ export default class RegisterScreen extends React.Component {
 
   handleSubmit = () => {
     const { email, password, username, name } = this.state;
+    const user = {
+      name,
+      username,
+      email,
+      password,
+      avatar: 'null',
+      subscribed_channels: '[]',
+      geolocation: 'null',
+      notifications: 'null',
+      token: 'null'
+    }
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -64,22 +75,12 @@ export default class RegisterScreen extends React.Component {
             Accept: 'application/json',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            name,
-            username,
-            email,
-            password,
-            avatar: 'null',
-            subscribed_channels: '[]',
-            geolocation: 'null',
-            notifications: 'null',
-            token: 'null'
-          })
+          body: JSON.stringify(user)
         });
       })
       .then(() => {
         console.log('user added');
-        this.props.navigation.navigate('AllChannels', { newuser: true });
+        this.props.navigation.navigate('AllChannels', { user });
       })
       .catch(function (error) {
         console.log(error.message);

@@ -48,7 +48,9 @@ export default class AllChannels extends React.Component {
     };
 
     getUserByUsername = (username) => {
-        if (this.props.navigation.state.params)
+        if (this.props.navigation.state.params) {
+            this.setState({ loggedUser: this.props.navigation.state.params.user });
+        } else {
             return fetch(`https://ea862c3d.ngrok.io/users/${username}`)
                 .then(response => {
                     if (response) {
@@ -72,6 +74,7 @@ export default class AllChannels extends React.Component {
                 .catch(error => {
                     console.error(error);
                 });
+        }
     };
 
     onClick = (channel) => {
@@ -129,24 +132,22 @@ export default class AllChannels extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.props.navigation.state.params) {
-            const { chosen, loggedUser } = this.state;
-            const keys = Object.keys(chosen)
-            const subscribedChannels = keys.filter(channel => {
-                return chosen[channel] === true
-            })
-            const { subscribed_channels, ...restOfUser } = loggedUser
-            const updatedUser = { ...restOfUser, subscribed_channels: JSON.stringify(subscribedChannels) }
-            console.log(updatedUser)
-            return fetch("https://ea862c3d.ngrok.io/users", {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(updatedUser)
-            }).catch(err => { console.log(err) })
-        }
+        const { chosen, loggedUser } = this.state;
+        const keys = Object.keys(chosen)
+        const subscribedChannels = keys.filter(channel => {
+            return chosen[channel] === true
+        })
+        const { subscribed_channels, ...restOfUser } = loggedUser
+        const updatedUser = { ...restOfUser, subscribed_channels: JSON.stringify(subscribedChannels) }
+        return fetch("https://ea862c3d.ngrok.io/users", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updatedUser)
+        }).catch(err => { console.log(err) })
+
     }
 }
 
