@@ -12,6 +12,7 @@ import {
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
+
 export default class SignInScreen extends React.Component {
   state = {
     email: '',
@@ -68,7 +69,6 @@ export default class SignInScreen extends React.Component {
         <TouchableOpacity
           style={styles.button}
           onPress={this.handleSubmit}
-          onPress={() => this.props.navigation.navigate('HomeScreen')}
         >
           <Text style={styles.btntext}>SIGN IN</Text>
         </TouchableOpacity>

@@ -1,6 +1,5 @@
 
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import { Image } from 'react-native';
 import React from "react";
 import MapScreen from "./components/map-screen/MapScreen";
 import CaptureScreen from "./components/capture-screens/CaptureScreen";
@@ -42,9 +41,6 @@ const AppNavigator = createStackNavigator(
   {
     initialRouteName: 'LoadingScreen',
     defaultNavigationOptions: {
-      headerLeft: (
-        <Image source={require('./logos/logo-transparent-background.png')} style={{ width: 40, height: 40 }} />
-      ),
       headerStyle: {
         backgroundColor: '#E6B655',
       },

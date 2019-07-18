@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   Text,
-  Button,
   Image,
   TouchableOpacity,
   StyleSheet,
@@ -18,11 +17,33 @@ import {
 } from 'react-native-material-cards';
 
 export default class HomeScreen extends React.Component {
+
   state = { images: [], image_id: [] };
 
   componentDidMount() {
     this.getImages();
   }
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: <Text>HOME</Text>,
+      headerLeft: (
+        <TouchableOpacity onPress={() => { navigation.navigate('AllChannels') }}>
+          <Image source={require('../../logos/logo-transparent-background.png')} style={{ width: 40, height: 40 }} />
+        </TouchableOpacity>
+      ),
+      headerRight: (
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => { navigation.navigate('AccountManagementScreen') }}>
+            <Image source={require('../../buttons/account-info.png')} style={{ width: 40, height: 40 }} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { navigation.navigate('CaptureScreen') }}>
+            <Image source={require('../../buttons/camera.png')} style={{ width: 40, height: 40 }} />
+          </TouchableOpacity>
+        </View>
+      ),
+    };
+  };
 
   render() {
     const { images } = this.state;
