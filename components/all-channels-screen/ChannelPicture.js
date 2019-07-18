@@ -15,7 +15,6 @@ export default class ChannelPicture extends React.Component {
 
     render() {
         const { channel_picture } = this.state
-        console.log(channel_picture)
         return (
             <View style={{ flex: 1.5, alignItems: "center", justifyContent: "center" }}>
                 {channel_picture && <Image

@@ -126,7 +126,7 @@ export default class UploadToChannels extends React.Component {
     const { channel_names } = this.state;
     return (
       <LinearGradient
-        colors={['#ADDDCE', '#76b6a2']}
+        colors={['#ca7e8d', '#a66673']}
         style={{ flex: 1 }}>
         <View style={{ flex: 1, alignSelf: "stretch" }}>
           {channel_names.map(channel => {
@@ -165,12 +165,13 @@ export default class UploadToChannels extends React.Component {
           })}
           <View style={{ flex: 2, alignSelf: "stretch", margin: 5 }}>
             <TextInput
-              style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+              style={{ height: 40, borderColor: "black", borderWidth: 1 }}
               onChangeText={text => this.setState({ text })}
               value={this.state.text}
             />
             <Button
               title="Share"
+              style={{ color: "black" }}
               onPress={() => {
                 this.saveToGallery();
               }}

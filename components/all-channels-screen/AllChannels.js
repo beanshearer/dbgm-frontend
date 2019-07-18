@@ -96,7 +96,7 @@ export default class AllChannels extends React.Component {
 
         return (
             <LinearGradient
-                colors={['#ADDDCE', '#76b6a2']}
+                colors={['#ca7e8d', '#a66673']}
                 style={{ flex: 1, alignItems: 'center' }}>
                 <Text
                     style={{ alignSelf: "stretch", margin: 5, padding: 5 }}
