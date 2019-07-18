@@ -1,6 +1,7 @@
 export default config = {
-    "apiKey": "AIzaSyA3uUEwXdg2cHox8_DFldTWMise1HmpKA8",
-    "authDomain": "nearby-9abd8.firebaseapp.com",
-    "databaseURL": "https://nearby-9abd8.firebaseio.com",
-    "storageBucket": "nearby-9abd8.appspot.com"
+    "apiKey": "AIzaSyDix1pu3sGM0KKGwT_g-C6vYNBXByic9wo",
+    "authDomain": "nearbyagain.firebaseapp.com",
+    "databaseURL": "https://nearbyagain.firebaseio.com",
+    "storageBucket": "nearbyagain.appspot.com"
 }
+

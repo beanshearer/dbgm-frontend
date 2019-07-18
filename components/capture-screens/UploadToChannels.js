@@ -104,7 +104,6 @@ export default class UploadToChannels extends React.Component {
 
   render() {
     const { channel_names } = this.state;
-    // console.log("photo location", this.props.navigation.state.params);
     return (
       <View style={{ flex: 1 }}>
         <Text>Share to Channels</Text>
@@ -142,7 +141,7 @@ export default class UploadToChannels extends React.Component {
               </View>
             );
           })}
-          <View style={{ flex: 1, alignSelf: "stretch", margin: 5 }}>
+          <View style={{ flex: 2, alignSelf: "stretch", margin: 5 }}>
             <TextInput
               style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
               onChangeText={text => this.setState({ text })}

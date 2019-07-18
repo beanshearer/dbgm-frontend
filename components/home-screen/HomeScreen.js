@@ -70,7 +70,7 @@ export default class HomeScreen extends React.Component {
               <TouchableOpacity
                 onPress={() =>
                   this.props.navigation.navigate('SingleImageScreen', {
-                    imgId: image.id
+                    imgId: image.id, downloadUrl: image.event_img
                   })
                 }
                 key={image.id}
@@ -90,7 +90,7 @@ export default class HomeScreen extends React.Component {
                   />
                   <CardTitle
                     title={image.username}
-                    subtitle={image.relevant_channels[0]}
+                    subtitle={image.relevant_channels}
                     style={{ fontSize: 15, fontWeight: 'bold' }}
                   />
                   <CardContent text={image.caption} />

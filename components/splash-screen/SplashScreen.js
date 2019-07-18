@@ -9,6 +9,17 @@ import {
 } from 'react-native';
 
 export default class SplashScreen extends React.Component {
+
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: <Text></Text>,
+      headerLeft: (
+        <Image source={require('../../logos/logo-transparent-background.png')} style={{ width: 30, height: 30 }} />
+      )
+    };
+  };
+
   render() {
     return (
       <View style={styles.container}>

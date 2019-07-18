@@ -79,9 +79,9 @@ export default class RegisterScreen extends React.Component {
       })
       .then(() => {
         console.log('user added');
-        this.props.navigation.navigate('AllChannels');
+        this.props.navigation.navigate('AllChannels', { newuser: true });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error.message);
       });
   };

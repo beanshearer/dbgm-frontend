@@ -68,6 +68,7 @@ export default class SingleChannelScreen extends React.Component {
                     channelImages.map(image => {
                         return (
                             <TouchableOpacity
+                                style={{ flex: 1, alignContent: "center", }}
                                 onPress={() =>
                                     this.props.navigation.navigate('SingleImageScreen', {
                                         imgId: image.id
@@ -76,16 +77,17 @@ export default class SingleChannelScreen extends React.Component {
                                 key={image.id}
                             >
                                 <Card
-                                    style={{ flex: 1, alignContent: "center" }}
+                                    style={{ flex: 1, alignContent: "center", }}
                                 >
                                     <Image
                                         source={{ uri: image.event_img }}
                                         title=""
                                         style={{
-                                            height: 450,
-                                            width: 270,
-                                            paddingLeft: 50,
-                                            paddingRight: 50
+                                            flex: 1,
+                                            resizeMode: "center",
+                                            height: 400,
+                                            width: 300,
+                                            paddingLeft: - 20
                                         }}
                                     />
                                     <CardTitle

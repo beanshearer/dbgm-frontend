@@ -48,26 +48,30 @@ export default class AllChannels extends React.Component {
     };
 
     getUserByUsername = (username) => {
-        return fetch(`https://ea862c3d.ngrok.io/users/${username}`)
-            .then(response => response.json())
-            .then(loggedUser => {
-                this.setState({ loggedUser });
-                return loggedUser
-            }).then(loggedUser => {
-                console.log(loggedUser.subscribed_channels)
-                let channels = ""
-                if (loggedUser.subscribed_channels.length > 0) {
-                    channels = JSON.parse(loggedUser.subscribed_channels)
-                    channels.map(channel => {
-                        this.setState({
-                            chosen: { ...this.state.chosen, [channel]: true }
+        if (this.props.navigation.state.params.newuser)
+            return fetch(`https://ea862c3d.ngrok.io/users/${username}`)
+                .then(response => {
+                    if (response) {
+                        return response.json()
+                    }
+                })
+                .then(loggedUser => {
+                    this.setState({ loggedUser });
+                    return loggedUser
+                }).then(loggedUser => {
+                    let channels = ""
+                    if (loggedUser.subscribed_channels.length > 0) {
+                        channels = JSON.parse(loggedUser.subscribed_channels)
+                        channels.map(channel => {
+                            this.setState({
+                                chosen: { ...this.state.chosen, [channel]: true }
+                            })
                         })
-                    })
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
     };
 
     onClick = (channel) => {
@@ -125,22 +129,24 @@ export default class AllChannels extends React.Component {
     }
 
     componentDidUpdate() {
-        const { chosen, loggedUser } = this.state;
-        const keys = Object.keys(chosen)
-        const subscribedChannels = keys.filter(channel => {
-            return chosen[channel] === true
-        })
-        const { subscribed_channels, ...restOfUser } = loggedUser
-        const updatedUser = { ...restOfUser, subscribed_channels: JSON.stringify(subscribedChannels) }
-        console.log(updatedUser)
-        return fetch("https://ea862c3d.ngrok.io/users", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(updatedUser)
-        }).catch(err => { console.log(err) })
+        if (this.props.navigation.state.params.newuser) {
+            const { chosen, loggedUser } = this.state;
+            const keys = Object.keys(chosen)
+            const subscribedChannels = keys.filter(channel => {
+                return chosen[channel] === true
+            })
+            const { subscribed_channels, ...restOfUser } = loggedUser
+            const updatedUser = { ...restOfUser, subscribed_channels: JSON.stringify(subscribedChannels) }
+            console.log(updatedUser)
+            return fetch("https://ea862c3d.ngrok.io/users", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updatedUser)
+            }).catch(err => { console.log(err) })
+        }
     }
 }
 
