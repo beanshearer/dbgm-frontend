@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, Button, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Image, TouchableOpacity } from "react-native";
 import CheckBox from "react-native-check-box";
 import "@expo/vector-icons";
-// import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase/app";
 import "firebase/storage";
 import * as FileSystem from "expo-file-system";
@@ -20,6 +20,26 @@ export default class UploadToChannels extends React.Component {
     photo: null,
     downloadUrl: "",
     photoId: ""
+  };
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: <Text>Share to Channels</Text>,
+      headerRight: (
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('HomeScreen');
+            }}
+          >
+            <Image
+              source={require('../../buttons/home.png')}
+              style={{ width: 40, height: 40 }}
+            />
+          </TouchableOpacity>
+        </View>
+      )
+    };
   };
 
   componentDidMount = () => {
@@ -105,12 +125,14 @@ export default class UploadToChannels extends React.Component {
   render() {
     const { channel_names } = this.state;
     return (
-      <View style={{ flex: 1 }}>
-        <Text>Share to Channels</Text>
+      <LinearGradient
+        colors={['#ADDDCE', '#76b6a2']}
+        style={{ flex: 1 }}>
         <View style={{ flex: 1, alignSelf: "stretch" }}>
           {channel_names.map(channel => {
             return (
-              <View
+              <LinearGradient
+                colors={['#e6b655', '#d2b16e']}
                 key={channel}
                 style={{ flex: 1, alignSelf: "stretch", margin: 5 }}
               >
@@ -120,7 +142,7 @@ export default class UploadToChannels extends React.Component {
                     alignSelf: "stretch",
                     borderRadius: 5,
                     padding: 15,
-                    backgroundColor: "#E6B655"
+                    // backgroundColor: "#E6B655"
                   }}
                 >
                   <CheckBox
@@ -138,7 +160,7 @@ export default class UploadToChannels extends React.Component {
                     rightText={channel}
                   />
                 </View>
-              </View>
+              </LinearGradient>
             );
           })}
           <View style={{ flex: 2, alignSelf: "stretch", margin: 5 }}>
@@ -155,7 +177,7 @@ export default class UploadToChannels extends React.Component {
             />
           </View>
         </View>
-      </View>
+      </LinearGradient>
     );
   }
 }

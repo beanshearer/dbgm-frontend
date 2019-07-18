@@ -22,7 +22,7 @@ export default class RegisterScreen extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: <Text>HI</Text>,
+      headerTitle: <Text>Register</Text>,
       headerRight: (
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <TouchableOpacity

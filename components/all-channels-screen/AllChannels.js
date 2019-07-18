@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'rea
 import CheckBox from 'react-native-check-box'
 import * as firebase from "firebase/app";
 import "firebase/auth"
+import { LinearGradient } from "expo-linear-gradient";
+import ChannelPicture from './ChannelPicture';
 
 export default class AllChannels extends React.Component {
     state = {
@@ -93,27 +95,31 @@ export default class AllChannels extends React.Component {
         const { channel_names, loggedUser } = this.state;
 
         return (
-            <View style={{ flex: 1, alignItems: 'center', backgroundColor: "#ADDDCE" }}>
+            <LinearGradient
+                colors={['#ADDDCE', '#76b6a2']}
+                style={{ flex: 1, alignItems: 'center' }}>
                 <Text
                     style={{ alignSelf: "stretch", margin: 5, padding: 5 }}
                 >{loggedUser.name} - Subscribed Channels</Text>
                 <ScrollView style={{ flex: 1, alignSelf: "stretch" }}>
                     {channel_names.map(channel => {
-                        return <View
+                        return <LinearGradient
+                            colors={['#e6b655', '#d2b16e']}
                             key={channel}
-                            style={{ flex: 1, alignSelf: "stretch", flexDirection: "row", margin: 5, padding: 15, backgroundColor: "#E6B655", borderRadius: 5 }}
+                            style={{ flex: 1, alignSelf: "stretch", flexDirection: "row", margin: 5, padding: 15, borderRadius: 5 }}
                         >
                             <CheckBox
                                 onClick={() => this.onClick(channel)}
                                 isChecked={this.state.chosen[channel]}
                             />
-                            <TouchableOpacity onPress={() => { this.props.navigation.navigate('SingleChannelScreen', { channel }) }}>
-                                <Text style={{ paddingLeft: 10 }} >{channel}</Text>
+                            <TouchableOpacity style={{ paddingLeft: 10, flex: 2 }} onPress={() => { this.props.navigation.navigate('SingleChannelScreen', { channel }) }}>
+                                <Text>{channel}</Text>
                             </TouchableOpacity>
-                        </View>
+                            <ChannelPicture channel={channel} />
+                        </LinearGradient>
                     })}
                 </ScrollView>
-            </View >
+            </LinearGradient >
         );
     }
 
