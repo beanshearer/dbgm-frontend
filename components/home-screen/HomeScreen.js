@@ -75,13 +75,17 @@ export default class HomeScreen extends React.Component {
                 }
                 key={image.id}
               >
-                <Card>
-                  <CardImage
+                <Card
+                  style={{ flex: 1, alignContent: "center" }}
+                >
+                  <Image
                     source={{ uri: image.event_img }}
                     title=""
                     style={{
-                      height: 250,
-                      width: 450
+                      height: 450,
+                      width: 270,
+                      paddingLeft: 50,
+                      paddingRight: 50
                     }}
                   />
                   <CardTitle
@@ -91,7 +95,7 @@ export default class HomeScreen extends React.Component {
                   />
                   <CardContent text={image.caption} />
                   <CardAction separator={true} inColumn={false}>
-                    <CardButton onPress={() => {}} title="" color="blue" />
+                    <CardButton onPress={() => { }} title="" color="blue" />
                   </CardAction>
                 </Card>
               </TouchableOpacity>

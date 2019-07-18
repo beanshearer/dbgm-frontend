@@ -1,21 +1,45 @@
-import React from "react";
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    StyleSheet
-} from "react-native";
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import CheckBox from 'react-native-check-box'
+import * as firebase from "firebase/app";
+import "firebase/auth"
 
 export default class AllChannels extends React.Component {
     state = {
-        users: []
+        username: "",
+        loggedUser: {},
+        channels: {},
+        channel_names: [],
+        chosen: {},
+        selected_channels: [],
     };
-    getUSers = () => {
-        return fetch("https://ea862c3d.ngrok.io/channels")
+
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: <Text>CHANNELS</Text>,
+            headerLeft: (
+                <Image source={require('../../logos/logo-transparent-background.png')} style={{ width: 40, height: 40 }} />
+            ),
+            headerRight: (
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('HomeScreen') }}>
+                        <Image source={require('../../buttons/home.png')} style={{ width: 40, height: 40 }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { navigation.navigate('CaptureScreen') }}>
+                        <Image source={require('../../buttons/camera.png')} style={{ width: 40, height: 40 }} />
+                    </TouchableOpacity>
+                </View>
+            ),
+        };
+    };
+
+    getChannel = () => {
+        return fetch('https://ea862c3d.ngrok.io/channels')
             .then(response => response.json())
             .then(responseJson => {
                 this.setState({
-                    users: Object.keys(responseJson)
+                    channels: responseJson,
+                    channel_names: Object.keys(responseJson)
                 });
             })
             .catch(error => {
@@ -23,69 +47,105 @@ export default class AllChannels extends React.Component {
             });
     };
 
+    getUserByUsername = (username) => {
+        return fetch(`https://ea862c3d.ngrok.io/users/${username}`)
+            .then(response => response.json())
+            .then(loggedUser => {
+                this.setState({ loggedUser });
+                return loggedUser
+            }).then(loggedUser => {
+                console.log(loggedUser.subscribed_channels)
+                let channels = ""
+                if (loggedUser.subscribed_channels.length > 0) {
+                    channels = JSON.parse(loggedUser.subscribed_channels)
+                    channels.map(channel => {
+                        this.setState({
+                            chosen: { ...this.state.chosen, [channel]: true }
+                        })
+                    })
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
+
+    onClick = (channel) => {
+        const { chosen } = this.state;
+        if (!chosen[channel]) {
+            return this.setState({
+                chosen: { ...chosen, [channel]: true }
+            })
+        } else
+            this.setState({
+                chosen: { ...chosen, [channel]: false }
+            });
+    }
+
     render() {
+        const { channel_names, loggedUser } = this.state;
+
         return (
-            <View style={styles.container}>
-                <Text>CHANNELS</Text>
-                {this.state.users &&
-                    this.state.users.map(user => {
-                        console.log(user);
-                        return (
-                            <View>
-                                <TouchableOpacity
-                                    style={styles.saveButton}
-                                    onPress={() => {
-                                        this.props.navigation.navigate("ChannelNotifications");
-                                    }}
-                                >
-                                    <Text>{user}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        );
+            <View style={{ flex: 1, alignItems: 'center', backgroundColor: "#ADDDCE" }}>
+                <Text
+                    style={{ alignSelf: "stretch", margin: 5, padding: 5 }}
+                >{loggedUser.name} - Subscribed Channels</Text>
+                <View style={{ flex: 1, alignItems: 'left', alignSelf: "stretch" }}>
+                    {channel_names.map(channel => {
+                        return <View
+                            key={channel}
+                            style={{ flex: 1, alignSelf: "stretch", margin: 5, padding: 15, backgroundColor: "#E6B655", borderRadius: 5 }}
+                        >
+                            <CheckBox
+                                onClick={() => this.onClick(channel)}
+                                isChecked={this.state.chosen[channel]}
+                                rightText={channel}
+                            />
+                        </View>
                     })}
-            </View>
+                </View>
+            </View >
         );
     }
 
     componentDidMount() {
-        this.getUSers();
+        this.getChannel();
+        let username = ""
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                username = user.displayName
+                this.setState({ username })
+                this.getUserByUsername(username)
+            } else {
+                this.setState({ username: "" })
+            }
+        })
+    }
+
+    componentDidUpdate() {
+        const { chosen, loggedUser } = this.state;
+        const keys = Object.keys(chosen)
+        const subscribedChannels = keys.filter(channel => {
+            return chosen[channel] === true
+        })
+        const { subscribed_channels, ...restOfUser } = loggedUser
+        const updatedUser = { ...restOfUser, subscribed_channels: JSON.stringify(subscribedChannels) }
+        console.log(updatedUser)
+        return fetch("https://ea862c3d.ngrok.io/users", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updatedUser)
+        }).catch(err => { console.log(err) })
     }
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 45,
-        backgroundColor: "#F5FCFF"
-    },
-    header: {
-        fontSize: 25,
-        textAlign: "center",
-        margin: 10,
-        fontWeight: "bold"
-    },
-    inputContainer: {
-        paddingTop: 15
-    },
-    textInput: {
-        borderColor: "#CCCCCC",
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
-        height: 50,
-        fontSize: 25,
-        paddingLeft: 20,
-        paddingRight: 20
-    },
-    saveButton: {
-        borderWidth: 1,
-        borderColor: "#007BFF",
-        backgroundColor: "#007BFF",
-        padding: 15,
-        margin: 5
-    },
-    saveButtonText: {
-        color: "#FFFFFF",
-        fontSize: 20,
-        textAlign: "center"
+        alignItems: 'center',
+        alignSelf: "stretch"
     }
 });
