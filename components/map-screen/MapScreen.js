@@ -102,8 +102,8 @@ export default class MapScreen extends Component {
               <MapView.Marker
                 key={id}
                 coordinate={{
-                  latitude,
-                  longitude
+                  latitude: +latitude,
+                  longitude: +longitude
                 }}
                 // icon={require("../../logos/binoculars.png")}
                 title={caption ? caption : ""}
