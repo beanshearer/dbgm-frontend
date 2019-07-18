@@ -1,12 +1,16 @@
 import React from 'react';
 import {
-  View,
   Text,
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Button,
+  View,
+  Image
 } from 'react-native';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 
 export default class RegisterScreen extends React.Component {
   state = {
@@ -16,7 +20,52 @@ export default class RegisterScreen extends React.Component {
     password: ''
   };
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: <Text>HI</Text>,
+      headerRight: (
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CaptureScreen');
+            }}
+          >
+            <Image
+              source={require('../../buttons/camera.png')}
+              style={{ width: 40, height: 40 }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('HomeScreen');
+            }}
+          >
+            <Image
+              source={require('../../buttons/home.png')}
+              style={{ width: 40, height: 40 }}
+            />
+          </TouchableOpacity>
+        </View>
+      )
+    };
+  };
+
   handleSubmit = () => {
+    const { email, password, username } = this.state;
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        const user = firebase.auth().currentUser;
+        user.updateProfile({ displayName: username });
+      })
+      .then(() => {
+        console.log('user added');
+        this.props.navigation.navigate('AllChannels');
+      })
+      .catch(function(error) {
+        console.log(error.message);
+      });
     fetch('https://ea862c3d.ngrok.io/users', {
       method: 'POST',
       headers: {
@@ -24,10 +73,12 @@ export default class RegisterScreen extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: this.state.name,
-        username: this.state.username,
-        email: this.state.email,
-        password: this.state.password
+        username: {
+          name: this.state.name,
+          username: this.state.username,
+          email: this.state.email,
+          password: this.state.password
+        }
       })
     });
   };
@@ -59,7 +110,7 @@ export default class RegisterScreen extends React.Component {
           style={styles.textInput}
           returnKeyLabel="next"
           maxLength={40}
-          placeholder="Email"
+          placeholder="E-mail"
           keyboardType="email-address"
           onChangeText={email => this.setState({ email })}
           value={email}
@@ -75,11 +126,7 @@ export default class RegisterScreen extends React.Component {
           secureTextEntry={true}
           underlineColorAndroid={'transparent'}
         />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={this.handleSubmit}
-          onPress={() => this.props.navigation.navigate('AllChannels')}
-        >
+        <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
           <Text style={styles.btntext}>SIGN UP</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
