@@ -36,6 +36,7 @@ export default class SignInScreen extends React.Component {
         console.log('User is signed out');
       }
     });
+    this.setState({ email: '', password: '' });
   };
 
   render() {
