@@ -51,13 +51,31 @@ export default class RegisterScreen extends React.Component {
   };
 
   handleSubmit = () => {
-    const { email, password, username } = this.state;
+    const { email, password, username, name } = this.state;
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         const user = firebase.auth().currentUser;
         user.updateProfile({ displayName: username });
+        return fetch('https://ea862c3d.ngrok.io/users', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            username,
+            email,
+            password,
+            avatar: 'null',
+            subscribed_channels: '[]',
+            geolocation: 'null',
+            notifications: 'null',
+            token: 'null'
+          })
+        });
       })
       .then(() => {
         console.log('user added');
@@ -66,21 +84,6 @@ export default class RegisterScreen extends React.Component {
       .catch(function(error) {
         console.log(error.message);
       });
-    fetch('https://ea862c3d.ngrok.io/users', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: {
-          name: this.state.name,
-          username: this.state.username,
-          email: this.state.email,
-          password: this.state.password
-        }
-      })
-    });
   };
 
   render() {

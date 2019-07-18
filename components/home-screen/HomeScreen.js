@@ -86,7 +86,6 @@ export default class HomeScreen extends React.Component {
       .then(responseJson => {
         let myImage = Object.values(responseJson);
         let myImage_id = Object.keys(responseJson);
-        console.log(myImage);
         this.setState({
           images: myImage,
           image_id: myImage_id
