@@ -61,10 +61,6 @@ export default class MapScreen extends Component {
       },
       { enableHighAccuracy: true, timeout: 30000 }
     );
-
-    // const location = await Location.getCurrentPositionAsync({ accuracy: 5 });
-    // this.setState({ location });
-    // .then(() => this.setState({ location }));
   };
 
   regionFrom(lat, lon, distance) {
@@ -99,7 +95,28 @@ export default class MapScreen extends Component {
           showsUserLocation={true}
         >
           {imageIds.map(id => {
-            return <Marker key={id} info={this.state.images[id]} />;
+            const info = this.state.images[id];
+            const { latitude, longitude } = info.geolocation;
+            const { caption } = info;
+            return (
+              <MapView.Marker
+                key={id}
+                coordinate={{
+                  latitude,
+                  longitude
+                }}
+                // icon={require("../../logos/binoculars.png")}
+                title={caption ? caption : ""}
+                onCalloutPress={() =>
+                  this.props.navigation.navigate("SingleImageScreen", {
+                    downloadUrl: info.event_img,
+                    photoId: id
+                  })
+                }
+              />
+            );
+
+            // <Marker key={id} info={this.state.images[id]} />;
           })}
         </MapView>
       </>

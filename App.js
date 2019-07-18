@@ -17,7 +17,6 @@ import config from "./config";
 import * as firebase from "firebase/app";
 import LoadingScreen from "./components/loading-screen/LoadingScreen";
 import SplashScreen from "./components/splash-screen/SplashScreen";
-import Marker from "./components/map-screen/Marker";
 
 firebase.initializeApp(config);
 
@@ -36,8 +35,7 @@ const AppNavigator = createStackNavigator(
     UploadToChannels,
     GalleryScreen,
     LoadingScreen,
-    SplashScreen,
-    Marker
+    SplashScreen
   },
   {
     initialRouteName: "LoadingScreen",
