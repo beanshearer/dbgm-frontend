@@ -84,6 +84,7 @@ export default class RegisterScreen extends React.Component {
       .catch(function(error) {
         console.log(error.message);
       });
+    this.setState({ email: '', password: '', username: '', name: '' });
   };
 
   render() {
