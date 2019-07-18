@@ -100,9 +100,9 @@ export default class AllChannels extends React.Component {
                                 onClick={() => this.onClick(channel)}
                                 isChecked={this.state.chosen[channel]}
                             />
-                            <Text
-                                style={{ paddingLeft: 10 }}
-                            >{channel}</Text>
+                            <TouchableOpacity onPress={() => { this.props.navigation.navigate('SingleChannelScreen', { channel }) }}>
+                                <Text style={{ paddingLeft: 10 }} >{channel}</Text>
+                            </TouchableOpacity>
                         </View>
                     })}
                 </ScrollView>

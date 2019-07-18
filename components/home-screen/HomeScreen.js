@@ -90,7 +90,7 @@ export default class HomeScreen extends React.Component {
                   />
                   <CardTitle
                     title={image.username}
-                    subtitle={image.relevant_channels}
+                    subtitle={image.relevant_channels[0]}
                     style={{ fontSize: 15, fontWeight: 'bold' }}
                   />
                   <CardContent text={image.caption} />
