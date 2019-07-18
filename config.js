@@ -1,7 +1,6 @@
 export default config = {
-    "apiKey": "AIzaSyDmP6hXcQwEV6MaBTHj-5Wxe_TtdVy8nZ0",
-    "authDomain": "bdgm-test.firebaseapp.com",
-    "databaseURL": "https://bdgm-test.firebaseio.com",
-    "storageBucket": "bdgm-test.appspot.com"
+    "apiKey": "AIzaSyA3uUEwXdg2cHox8_DFldTWMise1HmpKA8",
+    "authDomain": "nearby-9abd8.firebaseapp.com",
+    "databaseURL": "https://nearby-9abd8.firebaseio.com",
+    "storageBucket": "nearby-9abd8.appspot.com"
 }
-
