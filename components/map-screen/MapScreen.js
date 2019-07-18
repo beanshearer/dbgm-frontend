@@ -1,86 +1,135 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { Component } from "react";
-import { Location, Permissions, MapView } from "expo";
+import { Location } from "expo";
+import * as Permissions from "expo-permissions";
+import MapView from "react-native-maps";
+import Marker from "./Marker";
 // import * as Location from "expo-location";
 
 export default class MapScreen extends Component {
-    state = {
-        errorMessage: "",
-        region: {}
-    };
+  state = {
+    errorMessage: "",
+    region: {},
+    images: {},
+    imageIds: []
+  };
 
-    componentWillMount() {
-        this.getLocation();
-    }
-
-    getLocation = async () => {
-        const { status } = await Permissions.askAsync(Permissions.LOCATION);
-        if (status !== "granted") {
-            console.log("PERMISSION NOT GRANTED!!");
-            this.setState({ errorMessage: "Permission not granted" });
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                const region = this.regionFrom(
-                    position.coords.latitude,
-                    position.coords.longitude,
-                    1000
-                );
-                this.setState({
-                    region
-                });
-            },
-            error => {
-                console.log(error);
-            },
-            { enableHighAccuracy: true, timeout: 30000 }
-        );
-
-        // const location = await Location.getCurrentPositionAsync({ accuracy: 5 });
-        // this.setState({ location });
-        // .then(() => this.setState({ location }));
-    };
-
-    regionFrom(lat, lon, distance) {
-        distance = distance / 2;
-        const circumference = 40075;
-        const oneDegreeOfLatitudeInMeters = 111.32 * 1000;
-        const angularDistance = distance / circumference;
-
-        const latitudeDelta = distance / oneDegreeOfLatitudeInMeters;
-        const longitudeDelta = Math.abs(
-            Math.atan2(
-                Math.sin(angularDistance) * Math.cos(lat),
-                Math.cos(angularDistance) - Math.sin(lat) * Math.sin(lat)
-            )
-        );
-
-        return (result = {
-            latitude: lat,
-            longitude: lon,
-            latitudeDelta,
-            longitudeDelta
+  componentWillMount() {
+    this.getLocation();
+  }
+  componentDidMount() {
+    this.getImages()
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({
+          images: responseJson,
+          imageIds: Object.keys(responseJson)
         });
+      })
+      //   .then(() => {
+      //     console.log(this.state);
+      //   })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  getImages = () => {
+    return fetch("https://ea862c3d.ngrok.io/images");
+  };
+
+  getLocation = async () => {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== "granted") {
+      console.log("PERMISSION NOT GRANTED!!");
+      this.setState({ errorMessage: "Permission not granted" });
     }
 
-    render() {
-        const { region } = this.state;
-        return (
-            <>
-                <MapView region={region} style={{ flex: 1 }} showsUserLocation={true}>
-                    {/* <MapView.Marker
-            coordinate={{
-              longitude: +region.longitude,
-              latitude: +region.latitude
-            }}
-            title="Hi"
-            description="You are here..."
-          /> */}
-                </MapView>
-            </>
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const region = this.regionFrom(
+          position.coords.latitude,
+          position.coords.longitude,
+          1000
         );
-    }
+        this.setState({
+          region
+        });
+      },
+      error => {
+        console.log(error);
+      },
+      { enableHighAccuracy: true, timeout: 30000 }
+    );
+  };
+
+  regionFrom(lat, lon, distance) {
+    distance = distance / 2;
+    const circumference = 40075;
+    const oneDegreeOfLatitudeInMeters = 111.32 * 1000;
+    const angularDistance = distance / circumference;
+
+    const latitudeDelta = distance / oneDegreeOfLatitudeInMeters;
+    const longitudeDelta = Math.abs(
+      Math.atan2(
+        Math.sin(angularDistance) * Math.cos(lat),
+        Math.cos(angularDistance) - Math.sin(lat) * Math.sin(lat)
+      )
+    );
+
+    return (result = {
+      latitude: lat,
+      longitude: lon,
+      latitudeDelta,
+      longitudeDelta
+    });
+  }
+
+  render() {
+    const { region, imageIds } = this.state;
+    return imageIds.length > 0 ? (
+      <>
+        <MapView
+          initialRegion={region}
+          style={{ flex: 1 }}
+          showsUserLocation={true}
+        >
+          {imageIds.map(id => {
+            const info = this.state.images[id];
+            const { latitude, longitude } = info.geolocation;
+            const { caption } = info;
+            return (
+              <MapView.Marker
+                key={id}
+                coordinate={{
+                  latitude,
+                  longitude
+                }}
+                // icon={require("../../logos/binoculars.png")}
+                title={caption ? caption : ""}
+                onCalloutPress={() =>
+                  this.props.navigation.navigate("SingleImageScreen", {
+                    downloadUrl: info.event_img,
+                    photoId: id
+                  })
+                }
+              />
+            );
+
+            // <Marker key={id} info={this.state.images[id]} />;
+          })}
+        </MapView>
+      </>
+    ) : (
+      <>
+        <MapView
+          initialRegion={region}
+          style={{ flex: 1 }}
+          showsUserLocation={true}
+        />
+      </>
+    );
+  }
 }
 
 // const styles = StyleSheet.create({

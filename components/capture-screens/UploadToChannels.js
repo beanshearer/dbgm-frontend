@@ -74,7 +74,7 @@ export default class UploadToChannels extends React.Component {
               });
           })
           .then(() => {
-            console.log(this.state.downloadUrl, this.state.photoId);
+            // console.log(this.state.downloadUrl, this.state.photoId);
             return fetch("https://ea862c3d.ngrok.io/images", {
               method: "POST",
               headers: {
