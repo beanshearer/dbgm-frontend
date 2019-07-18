@@ -1,156 +1,166 @@
-import React from "react";
+import React from 'react';
 import {
-    View,
     Text,
     StyleSheet,
     TextInput,
     TouchableOpacity,
-} from "react-native";
+    KeyboardAvoidingView,
+    Button,
+    View,
+    Image
+} from 'react-native';
+import * as firebase from "firebase/app";
+import "firebase/auth";
 
 export default class RegisterScreen extends React.Component {
     state = {
-        name: "",
-        username: "",
-        email: "",
-        password: ""
+        name: '',
+        username: '',
+        email: '',
+        password: ''
     };
 
-    handleNameInput = nameInput => {
-        this.setState(prevState => {
-            return {
-                name: nameInput
-            };
-        });
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: <Text>HI</Text>,
+            headerRight: (
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('CaptureScreen') }}>
+                        <Image source={require('../../buttons/camera.png')} style={{ width: 40, height: 40 }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { navigation.navigate('HomeScreen') }}>
+                        <Image source={require('../../buttons/home.png')} style={{ width: 40, height: 40 }} />
+                    </TouchableOpacity>
+                </View>
+            ),
+        };
     };
 
-    handleUsernameInput = usernameInput => {
-        this.setState(prevState => {
-            return {
-                username: usernameInput
-            };
-        });
-    };
-
-    handleEmailInput = emailInput => {
-        this.setState(prevState => {
-            return {
-                email: emailInput
-            };
-        });
-    };
-
-    handlePasswordInput = passwordInput => {
-        this.setState(prevState => {
-            return {
-                password: passwordInput
-            };
-        });
-    };
 
     handleSubmit = () => {
-        fetch("https://ea862c3d.ngrok.io/users", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username: {
-                    name: this.state.name,
-                    username: this.state.username,
-                    email: this.state.emailInput,
-                    password: this.state.passwordInput
-                }
+        const { email, password, username, name } = this.state;
+        firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                const user = firebase.auth().currentUser;
+                user.updateProfile({ displayName: username })
+                return fetch("https://ea862c3d.ngrok.io/users", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name, username, email, password,
+                        avatar: "null",
+                        subscribed_channels: '[]',
+                        geolocation: "null",
+                        notifications: "null",
+                        token: "null"
+                    })
+                })
             })
-        });
+            .then(() => {
+                console.log('user added')
+                this.props.navigation.navigate('AllChannels')
+            })
+            .catch(function (error) {
+                console.log(error.message)
+            });
     };
 
     render() {
+        const { name, password, username, email } = this.state;
         return (
-            <View>
-                <View>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="enter name"
-                        maxLength={40}
-                        value={this.state.name}
-                        onChangeText={this.handleNameInput}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="enter username"
-                        maxLength={40}
-                        value={this.state.username}
-                        onChangeText={this.handleUsernameInput}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="enter email address"
-                        maxLength={40}
-                        value={this.state.email}
-                        onChangeText={this.handleEmailInput}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="enter password"
-                        maxLength={40}
-                        value={this.state.password}
-                        onChangeText={this.handlePasswordInput}
-                    />
-                    <View style={styles.inputContainer}>
-                        <TouchableOpacity
-                            style={styles.saveButton}
-                            onPress={this.handleSubmit}
-                        >
-                            <Text style={styles.saveButtonText}>Sign In</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
+            <KeyboardAvoidingView style={styles.container} behavior="padding">
+                <Text style={styles.header}>Register</Text>
+                <TextInput
+                    style={styles.textInput}
+                    maxLength={40}
+                    returnKeyLabel="next"
+                    placeholder="Name"
+                    onChangeText={name => this.setState({ name })}
+                    value={name}
+                    underlineColorAndroid={'transparent'}
+                />
+                <TextInput
+                    style={styles.textInput}
+                    returnKeyLabel="next"
+                    maxLength={40}
+                    placeholder="Username"
+                    onChangeText={username => this.setState({ username })}
+                    value={username}
+                    underlineColorAndroid={'transparent'}
+                />
+                <TextInput
+                    style={styles.textInput}
+                    returnKeyLabel="next"
+                    maxLength={40}
+                    placeholder="E-mail"
+                    keyboardType="email-address"
+                    onChangeText={email => this.setState({ email })}
+                    value={email}
+                    underlineColorAndroid={'transparent'}
+                />
+                <TextInput
+                    style={styles.textInput}
+                    returnKeyLabel="go"
+                    maxLength={40}
+                    placeholder="Password"
+                    onChangeText={password => this.setState({ password })}
+                    value={password}
+                    secureTextEntry={true}
+                    underlineColorAndroid={'transparent'}
+                />
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={this.handleSubmit}
+                >
+                    <Text style={styles.btntext}>SIGN UP</Text>
+                </TouchableOpacity>
+            </KeyboardAvoidingView>
         );
     }
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 45,
-        backgroundColor: "#F5FCFF"
+        justifyContent: 'center',
+        backgroundColor: '#CA7E8D',
+        paddingLeft: 60,
+        paddingRight: 60
+    },
+    regform: {
+        alignSelf: 'stretch'
     },
     header: {
         fontSize: 25,
-        textAlign: "center",
-        margin: 10,
-        fontWeight: "bold"
-    },
-    inputContainer: {
-        paddingTop: 15
+        color: 'white',
+        paddingBottom: 10,
+        marginBottom: 40,
+        borderBottomColor: 'white',
+        borderBottomWidth: 2
     },
     textInput: {
-        borderColor: "#CCCCCC",
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
-        height: 50,
-        fontSize: 25,
-        paddingLeft: 20,
-        paddingRight: 20
+        alignSelf: 'stretch',
+        height: 40,
+        padding: 10,
+        marginBottom: 10,
+        color: 'white',
+        borderBottomColor: 'white',
+        borderBottomWidth: 2
     },
-    saveButton: {
-        borderWidth: 1,
-        borderColor: "#007BFF",
-        backgroundColor: "#007BFF",
-        padding: 15,
-        margin: 5
+    button: {
+        alignSelf: 'stretch',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#E6B655',
+        marginTop: 20,
+        marginBottom: 90
     },
-    saveButtonText: {
-        color: "#FFFFFF",
-        fontSize: 20,
-        textAlign: "center"
+    btntext: {
+        color: 'white',
+        fontWeight: 'bold'
     }
 });
