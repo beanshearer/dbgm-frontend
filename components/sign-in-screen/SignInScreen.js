@@ -1,5 +1,5 @@
-
 import React from 'react';
+React.createContext('light');
 import {
   View,
   Text,
@@ -9,6 +9,8 @@ import {
   Image,
   KeyboardAvoidingView
 } from 'react-native';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 
 export default class SignInScreen extends React.Component {
   state = {
@@ -17,18 +19,22 @@ export default class SignInScreen extends React.Component {
   };
 
   handleSubmit = () => {
-    fetch('https://ea862c3d.ngrok.io/users', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: {
-          email: this.state.email,
-          password: this.state.password
-        }
+    const { email, password } = this.state;
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(res => {
+        console.log(res);
       })
+      .catch(function(error) {
+        console.log(error.code);
+      });
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        console.log('User is signed in.');
+      } else {
+        console.log('User is signed out');
+      }
     });
   };
 
@@ -68,84 +74,6 @@ export default class SignInScreen extends React.Component {
       </KeyboardAvoidingView>
     );
   }
-=======
-import React from "react";
-React.createContext('light');
-import {
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    Image
-} from "react-native";
-import * as firebase from "firebase/app";
-import "firebase/auth";
-
-export default class SignInScreen extends React.Component {
-    state = {
-        email: "",
-        password: ""
-    };
-
-    handleUsernameInput = email => {
-        this.setState({ email });
-    };
-
-    handlePasswordInput = password => {
-        this.setState({ password });
-    };
-
-    handleSubmit = () => {
-        const { email, password } = this.state;
-        firebase.auth()
-            .signInWithEmailAndPassword(email, password)
-            .then(res => { console.log(res) })
-            .catch(function (error) {
-                console.log(error.code);
-            });
-        firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
-                console.log('User is signed in.')
-            } else {
-                console.log('User is signed out')
-            }
-        });
-    };
-
-    render() {
-        return (
-            <View>
-                <Image source={require('../../logos/logo-transparent-background.png')} />
-                <View>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="enter username"
-                        maxLength={40}
-                        value={this.state.username}
-                        onChangeText={this.handleUsernameInput}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="enter password"
-                        maxLength={40}
-                        value={this.state.password}
-                        onChangeText={this.handlePasswordInput}
-                    />
-                    <View style={styles.inputContainer}>
-                        <TouchableOpacity
-                            style={styles.saveButton}
-                            onPress={this.handleSubmit}
-                        >
-                            <Text style={styles.saveButtonText}>Sign In</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        );
-    }
 }
 
 const styles = StyleSheet.create({
